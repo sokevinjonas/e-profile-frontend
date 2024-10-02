@@ -1,0 +1,7 @@
+{
+  "name": "e-profile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
