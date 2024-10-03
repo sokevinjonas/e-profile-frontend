@@ -3,9 +3,9 @@ ion-content {
 }
 
 .signup-container {
-  max-width: 400px;
+  width: 100%;
   margin: 0 auto;
-  padding-top: 20px;
+  padding-top: 10px;
 }
 
 .logo-container {
@@ -47,8 +47,6 @@ ion-item {
 }
 
 ion-input {
-  --padding-start: 12px;
-  --padding-end: 12px;
   border-radius: 8px;
 }
 

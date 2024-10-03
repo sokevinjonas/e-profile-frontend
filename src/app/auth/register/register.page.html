@@ -17,15 +17,15 @@
         </ion-card-subtitle>
       </ion-card-header>
 
-      <ion-card-content>
-        <form (ngSubmit)="onSubmit()">
+      <ion-card-content class="ion-padding">
+        <form [formGroup]="registerForm">
           <ion-item lines="full">
             <ion-input
+              formControlName="nom"
               label="Nom:"
               position="floating"
               type="text"
               required
-              name="nom"
               placeholder="OUEDRAOGO"
             ></ion-input>
           </ion-item>
@@ -36,7 +36,7 @@
               position="floating"
               type="text"
               required
-              name="prenom"
+              formControlName="prenom"
               placeholder="Marc Alex"
             ></ion-input>
           </ion-item>
@@ -47,41 +47,48 @@
               position="floating"
               type="email"
               required
-              name="email"
+              formControlName="email"
               placeholder="marcalex@gmail.com"
             ></ion-input>
           </ion-item>
 
           <ion-item lines="full">
             <ion-input
-              label="Mot de passe:"
-              position="floating"
+              formControlName="password"
+              label="Mot de passe"
+              label-placement="floating"
               type="password"
-              required
-              name="password"
               placeholder="*******"
-            ></ion-input>
+            >
+              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+            </ion-input>
           </ion-item>
 
           <ion-item lines="full">
             <ion-input
-              label="Confirmer le mot de passe:"
-              position="floating"
+              label="Confirmer le mot de passe"
+              formControlName="password"
+              label-placement="floating"
               type="password"
               required
-              name="confirmPassword"
+              formControlName="password_confirmation"
               placeholder="*******"
-            ></ion-input>
+              ><ion-input-password-toggle
+                slot="end"
+              ></ion-input-password-toggle>
+            </ion-input>
           </ion-item>
 
           <ion-button
             expand="block"
-            type="submit"
+            [disabled]="registerForm.invalid"
+            (click)="onSubmit()"
             class="ion-margin-top ion-margin-bottom"
           >
             <ion-icon name="person-add-outline" slot="start"></ion-icon>
             Créer mon E-Profile
           </ion-button>
+          <ion-spinner *ngIf="isLoading"></ion-spinner>
         </form>
 
         <div class="login-link ion-text-center">
