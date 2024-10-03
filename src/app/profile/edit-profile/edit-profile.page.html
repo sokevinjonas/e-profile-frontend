@@ -1,13 +1,61 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>edit-profile</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">edit-profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="profile-header">
+    <ion-avatar class="large-avatar">
+      <img src="https://placehold.co/250x250" alt="Photo de profil" />
+    </ion-avatar>
+    <div class="profile-info">
+      <h3>JohnDoe</h3>
+      <ion-note>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores
+        inventore.
+      </ion-note>
+    </div>
+  </div>
+  <ion-grid fixed>
+    <ion-row class="service" *ngFor="let service of services; let i = index">
+      <ion-col size="12">
+        <ion-card class="profile-card" id="popover-button-{{ i }}">
+          <ion-card-content>
+            <p class="profile-description">{{ service }}</p>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Popover en dehors de l'ion-card -->
+        <ion-popover trigger="popover-button-{{ i }}" [dismissOnSelect]="true">
+          <ng-template>
+            <ion-content>
+              <ion-list>
+                <ion-item lines="none" [button]="true" [detail]="false"
+                  >Modifier</ion-item
+                >
+                <ion-item
+                  lines="none"
+                  (click)="deleteService(i)"
+                  [button]="true"
+                  [detail]="false"
+                  >Supprimer</ion-item
+                >
+              </ion-list>
+            </ion-content>
+          </ng-template>
+        </ion-popover>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-button (click)="addClickService()" expand="block" shape="round">
+          <ion-icon name="add"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
