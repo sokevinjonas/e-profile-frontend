@@ -1,13 +1,96 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding" fullscreen>
+  <div class="signup-container">
+    <div class="logo-container">
+      <img
+        src="https://placehold.co/120x120"
+        alt="E-Profile Logo"
+        class="logo"
+      />
+    </div>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="ion-text-center">
+          <ion-text color="primary">Bienvenue sur E-Profile</ion-text>
+        </ion-card-title>
+        <ion-card-subtitle class="ion-text-center">
+          Créez votre profil professionnel en quelques étapes
+        </ion-card-subtitle>
+      </ion-card-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+      <ion-card-content>
+        <form (ngSubmit)="onSubmit()">
+          <ion-item lines="full">
+            <ion-input
+              label="Nom:"
+              position="floating"
+              type="text"
+              required
+              name="nom"
+              placeholder="OUEDRAOGO"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-input
+              label="Prénom(s):"
+              position="floating"
+              type="text"
+              required
+              name="prenom"
+              placeholder="Marc Alex"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-input
+              label="Email:"
+              position="floating"
+              type="email"
+              required
+              name="email"
+              placeholder="marcalex@gmail.com"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-input
+              label="Mot de passe:"
+              position="floating"
+              type="password"
+              required
+              name="password"
+              placeholder="*******"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-input
+              label="Confirmer le mot de passe:"
+              position="floating"
+              type="password"
+              required
+              name="confirmPassword"
+              placeholder="*******"
+            ></ion-input>
+          </ion-item>
+
+          <ion-button
+            expand="block"
+            type="submit"
+            class="ion-margin-top ion-margin-bottom"
+          >
+            <ion-icon name="person-add-outline" slot="start"></ion-icon>
+            Créer mon E-Profile
+          </ion-button>
+        </form>
+
+        <div class="login-link ion-text-center">
+          <p>
+            Déjà membre ?
+            <a routerLink="/login">Connectez-vous ici</a>
+          </p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
