@@ -29,7 +29,6 @@ export class LoginPage implements OnInit {
       const user = this.loginForm.value;
       this.authService.login(user).subscribe({
         next: (response) => {
-          this.authService.setToken(response.access_token);
           console.log('Utilisateur connecté', response.data);
           this.isLoading = false;
           this.route.navigate(['/tabs/tab1']);

@@ -9,10 +9,13 @@
 <ion-content>
   <div class="profile-header">
     <ion-avatar class="large-avatar">
-      <img src="https://placehold.co/250x250" alt="Photo de profil" />
+      <img
+        [src]="authService.userInfo?.profile_image ?? 'https://placehold.co/250x250'"
+        alt="Photo de profil"
+      />
     </ion-avatar>
     <div class="profile-info">
-      <h3>JohnDoe</h3>
+      <h3>{{authService.userInfo?.prenom}} {{authService.userInfo?.nom}}</h3>
       <ion-note>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores
         inventore.
@@ -33,7 +36,12 @@
           <ng-template>
             <ion-content>
               <ion-list>
-                <ion-item lines="none" [button]="true" [detail]="false"
+                <ion-item
+                  id="present-alert"
+                  lines="none"
+                  [button]="true"
+                  [detail]="false"
+                  (click)="editService(i)"
                   >Modifier</ion-item
                 >
                 <ion-item
@@ -58,4 +66,10 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <ion-alert
+    header="Services ou Prestations"
+    [buttons]="alertButtons"
+    [inputs]="alertInputs"
+  ></ion-alert>
 </ion-content>

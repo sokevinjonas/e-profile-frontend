@@ -7,7 +7,7 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['tab1.page.scss'],
 })
 export class Tab1Page {
-  constructor(private authService: AuthService) {}
+  constructor(protected authService: AuthService) {}
 
   ngOnInit() {}
 }

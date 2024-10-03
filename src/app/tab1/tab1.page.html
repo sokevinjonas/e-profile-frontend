@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>E-Profile</ion-title>
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button (click)="authService.logout()">
         <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -15,13 +15,16 @@
       <ion-avatar>
         <img src="https://placehold.co/150x150" alt="Photo de profil" />
       </ion-avatar>
-      <h2>John Doe</h2>
+      <h2>{{authService.userInfo?.prenom}} {{authService.userInfo?.nom}}</h2>
     </div>
     <ion-card-content>
       <div class="profile-info">
         <p><ion-icon name="link-outline"></ion-icon> eprofile.com/johndoe</p>
-        <p><ion-icon name="eye-outline"></ion-icon> 1234 visiteurs</p>
-        <p><ion-icon name="calendar-outline"></ion-icon> Créé le 01/05/2023</p>
+        <p><ion-icon name="eye-outline"></ion-icon> 0 visiteurs</p>
+        <p>
+          <ion-icon name="calendar-outline"></ion-icon> Créé le
+          {{authService.userInfo?.created_at}}
+        </p>
       </div>
       <ion-button expand="block" color="primary" class="copy-link-btn">
         <ion-icon name="copy-outline" slot="start"></ion-icon>
