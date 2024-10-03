@@ -18,14 +18,14 @@
       </ion-card-header>
 
       <ion-card-content>
-        <form (ngSubmit)="onLogin()">
+        <form [formGroup]="loginForm">
           <ion-item lines="full">
             <ion-input
               label="Email mail:"
               position="floating"
               type="email"
               required
-              name="email"
+              formControlName="email"
               placeholder="marcalex@gmail.com"
             ></ion-input>
           </ion-item>
@@ -36,18 +36,20 @@
               type="password"
               required
               placeholder="*******"
-              name="password"
+              formControlName="password"
             ></ion-input>
           </ion-item>
 
           <ion-button
             expand="block"
-            type="submit"
+            (click)="onLogin()"
+            [disabled]="loginForm.invalid"
             class="ion-margin-top ion-margin-bottom"
           >
             <ion-icon name="log-in-outline" slot="start"></ion-icon>
             Se connecter
           </ion-button>
+          <ion-spinner *ngIf="isLoading"></ion-spinner>
         </form>
 
         <div class="forgot-password ion-text-center">

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  AbstractControlOptions,
   FormBuilder,
   FormGroup,
   ValidatorFn,
@@ -58,7 +57,7 @@ export class RegisterPage implements OnInit {
         next: (response) => {
           console.log('Inscription réussie', response);
           this.isLoading = false;
-          this.route.navigate(['/tabs/tab1']);
+          this.route.navigate(['/login']);
         },
         error: (error) => {
           console.error("Erreur lors de l'inscription", error);
