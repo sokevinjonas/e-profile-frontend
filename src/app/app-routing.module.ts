@@ -13,6 +13,14 @@ const routes: Routes = [
   {
     path: 'register',
     loadChildren: () => import('./auth/register/register.module').then( m => m.RegisterPageModule)
+  },
+  {
+    path: 'profile',
+    loadChildren: () => import('./profile/profile/profile.module').then( m => m.ProfilePageModule)
+  },
+  {
+    path: 'edit-profile',
+    loadChildren: () => import('./profile/edit-profile/edit-profile.module').then( m => m.EditProfilePageModule)
   }
 ];
 @NgModule({
