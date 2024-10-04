@@ -202,8 +202,8 @@ export class EditProfilePage implements OnInit {
           placeholder: 'Entrez votre nouvelle biographie',
           value: this.bioProfile,
           attributes: {
-            rows: 3,
-            cols: 2,
+            rows: 2,
+            cols: 1,
             maxlength: 50,
           },
         },

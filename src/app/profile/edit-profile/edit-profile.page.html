@@ -63,7 +63,7 @@
       ></ion-alert>
     </ion-row>
 
-    <ion-row>
+    <ion-row *ngIf="globalService.services.length <4">
       <ion-col size="12">
         <ion-button (click)="addClickService()" expand="block" shape="round">
           <ion-icon name="add"></ion-icon>
