@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Services } from 'src/app/interfaces/services';
 import { AuthService } from 'src/app/services/auth.service';
 import { GlobaleService } from 'src/app/services/globale.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-edit-profile',
@@ -10,34 +11,36 @@ import { GlobaleService } from 'src/app/services/globale.service';
 })
 export class EditProfilePage implements OnInit {
   public alertButtons: any[] = [];
-  public currentServiceIndex: number | null = null; // Index du service en cours de modification
+  public currentServiceIndex: number | null = null;
   profileDescription: string =
     'Lorem ipsum dolor sit amet consectetur adipisicing';
+  bioProfile: string = '';
 
   constructor(
     protected authService: AuthService,
-    protected globalService: GlobaleService
+    protected globalService: GlobaleService,
+    private alertController: AlertController
   ) {}
 
-  // Inputs pour l'alert
   public alertInputs = [
     {
-      name: 'titre', // Nom de l'input pour récupérer la saisie
+      name: 'titre',
       placeholder: 'Nom de la Prestation',
       type: 'textarea',
-      value: 'Test ici',
+      value: '',
       attributes: {
         maxlength: 50,
       },
     },
   ];
-  editUser() {}
+
   ngOnInit() {
     this.loadServices();
-    this.lodButtonService();
+    this.loadButtonService();
+    this.getBioProfile();
   }
 
-  lodButtonService() {
+  loadButtonService() {
     this.alertButtons = [
       {
         text: 'Annuler',
@@ -46,80 +49,137 @@ export class EditProfilePage implements OnInit {
       {
         text: 'OK',
         handler: (data: { titre: string }) => {
-          // Log du texte saisi par l'utilisateur
-          console.log('Valeur saisie :', data.titre);
-
-          // Modifier la saisie à l'index du service courant
           if (this.currentServiceIndex !== null && data.titre) {
-            this.globalService.services[this.currentServiceIndex].titre =
-              data.titre;
-            this.currentServiceIndex = null; // Réinitialiser l'index
+            const updatedService =
+              this.globalService.services[this.currentServiceIndex];
+            updatedService.titre = data.titre;
+            this.updateService(updatedService);
           }
         },
       },
     ];
   }
-  // Méthode pour sélectionner un service à modifier
-  editService(serviceId: number) {
-    // Trouver le service correspondant à l'ID
+
+  async editService(serviceId: number) {
     const serviceIndex = this.globalService.services.findIndex(
       (service) => service.id === serviceId
     );
 
     if (serviceIndex !== -1) {
-      this.currentServiceIndex = serviceIndex; // Enregistrer l'index du service sélectionné
+      this.currentServiceIndex = serviceIndex;
       const serviceToEdit = this.globalService.services[serviceIndex];
 
-      // Préremplir l'alerte avec le service sélectionné
-      this.alertInputs[0].name = serviceToEdit.titre; // Assigner la valeur au champ input de l'alerte
-
-      // Afficher l'alerte
-      setTimeout(() => {
-        const alert = document.querySelector('ion-alert');
-        if (alert) {
-          alert.present();
-        }
+      const alert = await this.alertController.create({
+        header: 'Modifier le service',
+        inputs: [
+          {
+            name: 'titre',
+            type: 'textarea',
+            placeholder: 'Nom de la Prestation',
+            value: serviceToEdit.titre,
+          },
+        ],
+        buttons: this.alertButtons,
       });
+
+      await alert.present();
     } else {
       console.error('Service non trouvé');
     }
   }
 
-  // Méthode pour ajouter un service
-  addClickService() {
-    const newService: Services = {
-      id: this.globalService.services.length + 1, // Assurez-vous que l'ID est unique
-      titre: `Service ${
-        this.globalService.services.length + 1
-      }: Lorem ipsum dolor sit amet consectetur.`,
-      // Ajoutez d'autres propriétés si nécessaire
-    };
-    this.globalService.services.push(newService); // Ajoutez l'objet nouvellement créé
+  updateService(service: Services) {
+    this.globalService.updateService(service).subscribe({
+      next: (response) => {
+        console.log('Service mis à jour avec succès', response);
+        this.loadServices();
+      },
+      error: (error) => {
+        console.error('Erreur lors de la mise à jour du service', error);
+      },
+    });
   }
 
-  // Supprime le service à l'index spécifié
-  deleteService(i: number) {
-    // Vérifier si l'index est valide
-    if (i > -1 && i < this.globalService.services.length) {
-      // Utiliser splice pour supprimer l'élément
-      this.globalService.services.splice(i, 1);
-    }
-  }
-  public userFormsAlerte = [
-    {
-      type: 'text',
-      placeholder: 'Nom',
-    },
-    {
-      type: 'text',
-      placeholder: 'Prenom',
-    },
+  async addClickService() {
+    const alert = await this.alertController.create({
+      header: 'Ajouter un nouveau service',
+      inputs: [
+        {
+          name: 'titre',
+          type: 'textarea',
+          placeholder: 'Nom de la Prestation',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Annuler',
+          role: 'cancel',
+        },
+        {
+          text: 'Ajouter',
+          handler: (data: { titre: string }) => {
+            if (data.titre) {
+              const newService: Services = {
+                titre: data.titre,
+                id: 0,
+              };
+              this.storeService(newService);
+            }
+          },
+        },
+      ],
+    });
 
-    {
-      type: 'textarea',
-      placeholder: 'A propos de Vous?',
-    },
-  ];
+    await alert.present();
+  }
+
+  storeService(service: Services) {
+    this.globalService.storeService(service).subscribe({
+      next: (response) => {
+        console.log('Nouveau service ajouté avec succès', response);
+        this.loadServices();
+      },
+      error: (error) => {
+        console.error("Erreur lors de l'ajout du service", error);
+      },
+    });
+  }
+
+  async deleteService(service: Services) {
+    const alert = await this.alertController.create({
+      header: 'Confirmer la suppression',
+      message: `Êtes-vous sûr de vouloir supprimer le service "${service.titre}" ?`,
+      buttons: [
+        {
+          text: 'Annuler',
+          role: 'cancel',
+        },
+        {
+          text: 'Supprimer',
+          handler: () => {
+            this.confirmDeleteService(service);
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  confirmDeleteService(service: Services) {
+    this.globalService.deleteService(service).subscribe({
+      next: () => {
+        console.log('Service supprimé avec succès');
+        // Ici, pas de manipulation du tableau local, juste une confirmation
+        // Optionnel : Recharge les services pour mettre à jour la liste depuis le serveur
+        this.loadServices();
+      },
+      error: (error) => {
+        console.error('Erreur lors de la suppression du service', error);
+      },
+    });
+  }
+
   loadServices() {
     this.globalService.getServices().subscribe({
       next: (response: any) => {
@@ -128,6 +188,64 @@ export class EditProfilePage implements OnInit {
       },
       error: (error) => {
         console.error('Erreur lors de la recuperation', error);
+      },
+    });
+  }
+  // Méthode pour afficher l'alerte et modifier la biographie
+  async storeBio() {
+    const alert = await this.alertController.create({
+      header: 'Modifier la Biographie',
+      inputs: [
+        {
+          name: 'bio',
+          type: 'textarea',
+          placeholder: 'Entrez votre nouvelle biographie',
+          value: this.bioProfile,
+          attributes: {
+            rows: 3,
+            cols: 2,
+            maxlength: 50,
+          },
+        },
+      ],
+      buttons: [
+        {
+          text: 'Annuler',
+          role: 'cancel',
+        },
+        {
+          text: 'Enregistrer',
+          handler: (data) => {
+            if (data.bio) {
+              this.updateBio(data.bio); // Appeler la méthode pour mettre à jour la bio
+            }
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  updateBio(newBio: string) {
+    console.log(newBio);
+
+    this.globalService.updateBioProfile(newBio).subscribe({
+      next: (response) => {
+        console.log('Biographie mise à jour avec succès', response);
+        this.bioProfile = newBio; // Mettre à jour la bio localement après succès
+      },
+      error: (error) => {
+        console.error('Erreur lors de la mise à jour de la biographie', error);
+        // Vous pouvez également afficher un message d'erreur à l'utilisateur ici
+      },
+    });
+  }
+
+  getBioProfile() {
+    this.globalService.getBioProfile().subscribe({
+      next: (response) => {
+        this.bioProfile = response.data.bio;
       },
     });
   }

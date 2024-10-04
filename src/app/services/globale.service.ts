@@ -14,14 +14,49 @@ export class GlobaleService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  // Méthode pour récupérer les services depuis l'API
-  getServices(): Observable<Services[]> {
+  private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
     let headers = new HttpHeaders();
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
-    console.log('En-têtes de la requête:', headers);
-    return this.http.get<Services[]>(`${this.apiUrl}services`, { headers });
+    return headers;
+  }
+
+  getServices(): Observable<Services[]> {
+    return this.http.get<Services[]>(`${this.apiUrl}services`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  updateService(service: Services): Observable<any> {
+    return this.http.put(`${this.apiUrl}services/${service.id}`, service, {
+      headers: this.getHeaders(),
+    });
+  }
+  storeService(service: Services): Observable<any> {
+    return this.http.post(`${this.apiUrl}services`, service, {
+      headers: this.getHeaders(),
+    });
+  }
+  deleteService(service: Services): Observable<any> {
+    return this.http.delete(`${this.apiUrl}services/${service.id}`, {
+      headers: this.getHeaders(),
+    });
+  }
+  updateBioProfile(bio: string): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}profile`,
+      { bio },
+      {
+        // Encapsulation de la biographie dans un objet
+        headers: this.getHeaders(),
+      }
+    );
+  }
+  getBioProfile(): Observable<any> {
+    return this.http.get<Services[]>(`${this.apiUrl}profile`, {
+      headers: this.getHeaders(),
+    });
   }
 }

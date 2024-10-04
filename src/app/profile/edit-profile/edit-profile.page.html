@@ -16,10 +16,7 @@
     </ion-avatar>
     <div class="profile-info">
       <h3>{{authService.userInfo?.prenom}} {{authService.userInfo?.nom}}</h3>
-      <ion-note>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores
-        inventore.
-      </ion-note>
+      <ion-note (click)="storeBio()"> {{ bioProfile}} </ion-note>
     </div>
   </div>
   <ion-grid fixed>
@@ -49,7 +46,7 @@
                 >
                 <ion-item
                   lines="none"
-                  (click)="deleteService(service.id)"
+                  (click)="deleteService(service)"
                   [button]="true"
                   [detail]="false"
                   >Supprimer</ion-item
