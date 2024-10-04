@@ -23,16 +23,19 @@
     </div>
   </div>
   <ion-grid fixed>
-    <ion-row class="service" *ngFor="let service of services; let i = index">
+    <ion-row class="service" *ngFor="let service of globalService.services">
       <ion-col size="12">
-        <ion-card class="profile-card" id="popover-button-{{ i }}">
+        <ion-card class="profile-card" id="popover-button-{{ service.id }}">
           <ion-card-content>
-            <p class="profile-description">{{ service }}</p>
+            <p class="profile-description">{{ service.titre }}</p>
           </ion-card-content>
         </ion-card>
 
         <!-- Popover en dehors de l'ion-card -->
-        <ion-popover trigger="popover-button-{{ i }}" [dismissOnSelect]="true">
+        <ion-popover
+          trigger="popover-button-{{ service.id }}"
+          [dismissOnSelect]="true"
+        >
           <ng-template>
             <ion-content>
               <ion-list>
@@ -41,12 +44,12 @@
                   lines="none"
                   [button]="true"
                   [detail]="false"
-                  (click)="editService(i)"
+                  (click)="editService(+service.id)"
                   >Modifier</ion-item
                 >
                 <ion-item
                   lines="none"
-                  (click)="deleteService(i)"
+                  (click)="deleteService(service.id)"
                   [button]="true"
                   [detail]="false"
                   >Supprimer</ion-item
@@ -56,6 +59,11 @@
           </ng-template>
         </ion-popover>
       </ion-col>
+      <ion-alert
+        header="Services ou Prestations"
+        [buttons]="alertButtons"
+        [inputs]="alertInputs"
+      ></ion-alert>
     </ion-row>
 
     <ion-row>
@@ -66,10 +74,4 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-
-  <ion-alert
-    header="Services ou Prestations"
-    [buttons]="alertButtons"
-    [inputs]="alertInputs"
-  ></ion-alert>
 </ion-content>

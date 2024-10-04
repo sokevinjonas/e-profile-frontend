@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Services } from 'src/app/interfaces/services';
 import { AuthService } from 'src/app/services/auth.service';
+import { GlobaleService } from 'src/app/services/globale.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -8,12 +10,14 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class EditProfilePage implements OnInit {
   public alertButtons: any[] = [];
-  public services: string[] = [];
   public currentServiceIndex: number | null = null; // Index du service en cours de modification
   profileDescription: string =
     'Lorem ipsum dolor sit amet consectetur adipisicing';
 
-  constructor(protected authService: AuthService) {}
+  constructor(
+    protected authService: AuthService,
+    protected globalService: GlobaleService
+  ) {}
 
   // Inputs pour l'alert
   public alertInputs = [
@@ -21,6 +25,7 @@ export class EditProfilePage implements OnInit {
       name: 'titre', // Nom de l'input pour récupérer la saisie
       placeholder: 'Nom de la Prestation',
       type: 'textarea',
+      value: 'Test ici',
       attributes: {
         maxlength: 50,
       },
@@ -28,6 +33,11 @@ export class EditProfilePage implements OnInit {
   ];
   editUser() {}
   ngOnInit() {
+    this.loadServices();
+    this.lodButtonService();
+  }
+
+  lodButtonService() {
     this.alertButtons = [
       {
         text: 'Annuler',
@@ -41,44 +51,58 @@ export class EditProfilePage implements OnInit {
 
           // Modifier la saisie à l'index du service courant
           if (this.currentServiceIndex !== null && data.titre) {
-            this.services[this.currentServiceIndex] = data.titre;
+            this.globalService.services[this.currentServiceIndex].titre =
+              data.titre;
             this.currentServiceIndex = null; // Réinitialiser l'index
           }
         },
       },
     ];
   }
-
   // Méthode pour sélectionner un service à modifier
-  editService(index: number) {
-    this.currentServiceIndex = index; // Enregistrer l'index du service sélectionné
-    // Préremplir l'alerte avec le service sélectionné
-    const serviceToEdit = this.services[index];
-    this.alertInputs[0].name = serviceToEdit; // Assigner la valeur au champ input de l'alerte
+  editService(serviceId: number) {
+    // Trouver le service correspondant à l'ID
+    const serviceIndex = this.globalService.services.findIndex(
+      (service) => service.id === serviceId
+    );
 
-    // Afficher l'alerte
-    setTimeout(() => {
-      const alert = document.querySelector('ion-alert');
-      if (alert) {
-        alert.present();
-      }
-    });
+    if (serviceIndex !== -1) {
+      this.currentServiceIndex = serviceIndex; // Enregistrer l'index du service sélectionné
+      const serviceToEdit = this.globalService.services[serviceIndex];
+
+      // Préremplir l'alerte avec le service sélectionné
+      this.alertInputs[0].name = serviceToEdit.titre; // Assigner la valeur au champ input de l'alerte
+
+      // Afficher l'alerte
+      setTimeout(() => {
+        const alert = document.querySelector('ion-alert');
+        if (alert) {
+          alert.present();
+        }
+      });
+    } else {
+      console.error('Service non trouvé');
+    }
   }
 
   // Méthode pour ajouter un service
   addClickService() {
-    const newServiceIndex = this.services.length + 1;
-    this.services.push(
-      `Service ${newServiceIndex}: Lorem ipsum dolor sit amet consectetur.`
-    );
+    const newService: Services = {
+      id: this.globalService.services.length + 1, // Assurez-vous que l'ID est unique
+      titre: `Service ${
+        this.globalService.services.length + 1
+      }: Lorem ipsum dolor sit amet consectetur.`,
+      // Ajoutez d'autres propriétés si nécessaire
+    };
+    this.globalService.services.push(newService); // Ajoutez l'objet nouvellement créé
   }
 
   // Supprime le service à l'index spécifié
   deleteService(i: number) {
     // Vérifier si l'index est valide
-    if (i > -1 && i < this.services.length) {
+    if (i > -1 && i < this.globalService.services.length) {
       // Utiliser splice pour supprimer l'élément
-      this.services.splice(i, 1);
+      this.globalService.services.splice(i, 1);
     }
   }
   public userFormsAlerte = [
@@ -96,4 +120,15 @@ export class EditProfilePage implements OnInit {
       placeholder: 'A propos de Vous?',
     },
   ];
+  loadServices() {
+    this.globalService.getServices().subscribe({
+      next: (response: any) => {
+        console.log('Liste des services', response.data);
+        this.globalService.services = response.data;
+      },
+      error: (error) => {
+        console.error('Erreur lors de la recuperation', error);
+      },
+    });
+  }
 }

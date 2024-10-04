@@ -4,25 +4,38 @@ import { Observable, tap } from 'rxjs';
 import { Users } from '../interfaces/users';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://127.0.0.1:8000/api'; // Remplacez par votre URL API
+  private apiUrl = environment.apiUrl; // Remplacez par votre URL API
   private tokenKey = 'auth_token'; // Clé pour stocker le token
   userInfo: Users | null = null;
   constructor(private http: HttpClient, private route: Router) {}
 
   // Vérifier si l'utilisateur est authentifié
   isAuthenticated(): boolean {
-    const token = this.getToken();
+    // const token = this.getToken();
+    const token = this.getInfoUser();
+    if (!token) {
+      return false; // Pas de token, donc non authentifié
+    }
+
+    // Vérifiez si le token est expiré
+    const currentTime = Math.floor(Date.now() / 1000); // Temps actuel en secondes
+    if (token.exp && currentTime >= token.exp) {
+      return false; // Le token a expiré
+    }
     return !!token; // Retourne true si le token est présent
   }
 
   // Récupérer le token depuis le localStorage
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    const token = localStorage.getItem(this.tokenKey);
+    // console.log('Token récupéré:', token); // Ajoutez ceci pour vérifier le token
+    return token;
   }
 
   // Stocker le token dans le localStorage
@@ -33,7 +46,7 @@ export class AuthService {
   // Méthode pour se connecter
   login(user: Users): Observable<any> {
     // intercepter la réponse de l'API après la connexion
-    return this.http.post(`${this.apiUrl}/login`, user).pipe(
+    return this.http.post(`${this.apiUrl}login`, user).pipe(
       tap((response: any) => {
         // Vérifier si le token est présent dans la réponse
         if (response && response.access_token) {
@@ -58,7 +71,7 @@ export class AuthService {
 
   // Méthode pour s'inscrire
   register(user: Users): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, user);
+    return this.http.post(`${this.apiUrl}register`, user);
   }
 
   // Méthode pour déconnecter

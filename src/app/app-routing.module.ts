@@ -27,6 +27,7 @@ const routes: Routes = [
       import('./profile/profile/profile.module').then(
         (m) => m.ProfilePageModule
       ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'edit-profile',
@@ -34,6 +35,7 @@ const routes: Routes = [
       import('./profile/edit-profile/edit-profile.module').then(
         (m) => m.EditProfilePageModule
       ),
+    canActivate: [AuthGuard],
   },
 ];
 @NgModule({
