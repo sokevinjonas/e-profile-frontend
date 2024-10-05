@@ -1,0 +1,14 @@
+<div class="profile-header">
+  <ion-avatar class="large-avatar">
+    <img
+      [src]="
+        authService.userInfo?.profile_image ?? 'https://placehold.co/250x250'
+      "
+      alt="Photo de profil"
+    />
+  </ion-avatar>
+  <div class="profile-info">
+    <h3>{{ authService.userInfo?.prenom }} {{ authService.userInfo?.nom }}</h3>
+    <ion-note (click)="storeBio()"> {{ bioProfile }} </ion-note>
+  </div>
+</div>
