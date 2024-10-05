@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { ThemeDefautComponent } from './mesthemes/theme-defaut/theme-defaut.component';
+import { Theme1Component } from './mesthemes/theme-1/theme-1.component';
 
 const routes: Routes = [
   {
@@ -37,6 +39,8 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
+  { path: 'theme-defaut', component: ThemeDefautComponent },
+  { path: 'theme-numero-1', component: Theme1Component },
 ];
 @NgModule({
   imports: [

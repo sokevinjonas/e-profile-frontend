@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { DefautComponent } from './defaut.component';
+import { ThemeDefautComponent } from './theme-defaut.component';
 
-describe('DefautComponent', () => {
-  let component: DefautComponent;
-  let fixture: ComponentFixture<DefautComponent>;
+describe('ThemeDefautComponent', () => {
+  let component: ThemeDefautComponent;
+  let fixture: ComponentFixture<ThemeDefautComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DefautComponent ],
+      declarations: [ ThemeDefautComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DefautComponent);
+    fixture = TestBed.createComponent(ThemeDefautComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

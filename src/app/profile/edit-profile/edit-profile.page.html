@@ -3,7 +3,13 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
     </ion-buttons>
-    <ion-button slot="end" expand="block" fill="clear" shape="round">
+    <ion-button
+      slot="end"
+      expand="block"
+      fill="clear"
+      shape="round"
+      (click)="navigateToComponent()"
+    >
       <ion-icon name="eye-outline"></ion-icon>
     </ion-button>
   </ion-toolbar>

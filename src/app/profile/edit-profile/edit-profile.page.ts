@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { GlobaleService } from 'src/app/services/globale.service';
 import { AlertController } from '@ionic/angular';
 import { SocialLinks } from 'src/app/interfaces/social-links';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-profile',
@@ -13,8 +14,10 @@ import { SocialLinks } from 'src/app/interfaces/social-links';
 export class EditProfilePage implements OnInit {
   bioProfile: string = '';
 
-  constructor(public globalService: GlobaleService) {}
-
+  constructor(public globalService: GlobaleService, private router: Router) {}
+  navigateToComponent() {
+    this.router.navigate(['/theme-defaut']);
+  }
   ngOnInit() {
     this.loadServices();
     this.getBioProfile();
