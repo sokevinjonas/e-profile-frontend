@@ -16,7 +16,7 @@ export class EditProfilePage implements OnInit {
 
   constructor(public globalService: GlobaleService, private router: Router) {}
   navigateToComponent() {
-    this.router.navigate(['/theme-defaut']);
+    this.router.navigate(['/theme/apercu/defaut']);
   }
   ngOnInit() {
     this.loadServices();

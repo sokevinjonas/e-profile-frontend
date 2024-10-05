@@ -39,8 +39,14 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
-  { path: 'theme-defaut', component: ThemeDefautComponent },
-  { path: 'theme-numero-1', component: Theme1Component },
+  {
+    path: 'theme',
+    loadChildren: () =>
+      import('./apercue-theme/apercue-theme.module').then(
+        (m) => m.ApercueThemePageModule
+      ),
+    canActivate: [AuthGuard],
+  },
 ];
 @NgModule({
   imports: [
