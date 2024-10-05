@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Users } from 'src/app/interfaces/users';
+import { AuthService } from 'src/app/services/auth.service';
 import { GlobaleService } from 'src/app/services/globale.service';
+import { ThemeDataService } from 'src/app/services/theme/theme-data.service';
 
 @Component({
   selector: 'app-theme-defaut',
@@ -7,7 +11,16 @@ import { GlobaleService } from 'src/app/services/globale.service';
   styleUrls: ['./theme-defaut.component.scss'],
 })
 export class ThemeDefautComponent implements OnInit {
-  constructor(public globalService: GlobaleService) {}
+  constructor(
+    public themeDataService: ThemeDataService,
+    public global: GlobaleService,
+    public auth: AuthService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.themeDataService.getBioProfile();
+    this.themeDataService.loadServices();
+    this.themeDataService.loadSocialLink();
+    // this.themeDataService.;
+  }
 }

@@ -1,1 +1,44 @@
-<p>theme-defaut works!</p>
+<div class="theme-container">
+  <div class="profile-header">
+    <ion-avatar class="large-avatar">
+      <img
+        [src]="auth.userInfo?.profile_image ?? 'https://placehold.co/250x250'"
+        alt="Photo de profil"
+      />
+    </ion-avatar>
+    <div class="profile-info">
+      <h2>{{ auth.userInfo?.prenom }} {{ auth.userInfo?.nom }}</h2>
+      <ion-note class="bio"> {{ themeDataService.bioProfile }} </ion-note>
+    </div>
+  </div>
+
+  <ion-grid fixed class="services-grid">
+    <ion-row>
+      <ion-col
+        size="12"
+        size-md="6"
+        *ngFor="let service of themeDataService.services"
+      >
+        <ion-card class="service-card">
+          <ion-card-content>
+            <!-- <h3>{{ service.titre }}</h3> -->
+            <p class="service-description">{{ service.titre }}</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="social-networks">
+    <h3>Mes réseaux sociaux</h3>
+    <div class="social-icons">
+      <ion-icon
+        *ngFor="let network of themeDataService.socialNetworks"
+        [name]="themeDataService.getIconName(network.platform)"
+        (click)="themeDataService.openLink(network.url)"
+        class="social-icon"
+        [style.color]="themeDataService.getIconColor(network.platform)"
+      ></ion-icon>
+    </div>
+  </div>
+</div>

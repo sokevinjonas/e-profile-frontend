@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Services } from 'src/app/interfaces/services';
-import { AuthService } from 'src/app/services/auth.service';
 import { GlobaleService } from 'src/app/services/globale.service';
-import { AlertController } from '@ionic/angular';
-import { SocialLinks } from 'src/app/interfaces/social-links';
 import { Router } from '@angular/router';
 
 @Component({
