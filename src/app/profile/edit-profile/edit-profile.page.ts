@@ -3,6 +3,7 @@ import { Services } from 'src/app/interfaces/services';
 import { AuthService } from 'src/app/services/auth.service';
 import { GlobaleService } from 'src/app/services/globale.service';
 import { AlertController } from '@ionic/angular';
+import { SocialLinks } from 'src/app/interfaces/social-links';
 
 @Component({
   selector: 'app-edit-profile',
@@ -17,6 +18,7 @@ export class EditProfilePage implements OnInit {
   ngOnInit() {
     this.loadServices();
     this.getBioProfile();
+    this.loadSocialLink();
   }
 
   loadServices() {
@@ -30,11 +32,25 @@ export class EditProfilePage implements OnInit {
       },
     });
   }
+  loadSocialLink() {
+    this.globalService.getSocialLink().subscribe({
+      next: (response: any) => {
+        console.log(response.data);
+        this.globalService.socialNetworks = response.data;
+      },
+      error: (error) => {
+        console.error('Erreur lors de la recuperation', error);
+      },
+    });
+  }
 
   getBioProfile() {
     this.globalService.getBioProfile().subscribe({
       next: (response) => {
         this.bioProfile = response.data.bio;
+      },
+      error: (error) => {
+        console.error('Erreur lors de la recuperation', error);
       },
     });
   }

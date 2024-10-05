@@ -3,6 +3,9 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
     </ion-buttons>
+    <ion-button slot="end" expand="block" fill="clear" shape="round">
+      <ion-icon name="eye-outline"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -21,5 +24,7 @@
       ></app-service-button-add>
     </ion-col>
   </ion-row>
-  <app-social-grid></app-social-grid>
+  <app-social-grid
+    [socialNetworks]="globalService.socialNetworks"
+  ></app-social-grid>
 </ion-content>

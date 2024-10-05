@@ -2,14 +2,15 @@
   <ion-row class="ion-justify-content-center">
     <ion-col size="auto" *ngFor="let network of socialNetworks">
       <ion-icon
-        [name]="network.icon"
+        [name]="getIconName(network.platform)"
         (click)="openLink(network.url)"
         class="social-icon"
+        [style.color]="getIconColor(network.platform)"
       ></ion-icon>
     </ion-col>
   </ion-row>
 </ion-grid>
 
-<ion-row class="ion-justify-content-center">
+<ion-row class="ion-justify-content-center" *ngIf="socialNetworks.length < 4">
   <ion-button (click)="addSocialNetwork()">Ajouter un Réseau Social</ion-button>
 </ion-row>

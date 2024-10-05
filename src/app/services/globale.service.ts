@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Services } from '../interfaces/services';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
+import { SocialLinks } from '../interfaces/social-links';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ import { AuthService } from './auth.service';
 export class GlobaleService {
   private apiUrl = environment.apiUrl;
   services: Services[] = [];
+  socialNetworks: SocialLinks[] = [];
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -59,5 +61,14 @@ export class GlobaleService {
       headers: this.getHeaders(),
     });
   }
-  // profile/social-links
+  storeSocialLink(social: SocialLinks): Observable<any> {
+    return this.http.post(`${this.apiUrl}social-links`, social, {
+      headers: this.getHeaders(),
+    });
+  }
+  getSocialLink(): Observable<SocialLinks[]> {
+    return this.http.get<SocialLinks[]>(`${this.apiUrl}social-links`, {
+      headers: this.getHeaders(),
+    });
+  }
 }
